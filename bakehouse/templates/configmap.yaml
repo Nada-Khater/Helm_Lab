@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- template "labels" . }}
+  creationTimestamp: null
+  name: bakehouse
+data:
+{{- range .Values.configMap.data }}
+- {{ . }} # get all data
+- {{ $.Values.metadata.name }} # point to root . not . related to Cmap
+{{- end }}

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Release.Name }}-{{ .Values.metadata.name }}
+    {{- template "labels" . }}
+
+{{- if eq .Values.metadata.env "dev" }}
+  name: {{ .Release.Name }}-{{ .Values.metadata.name }}-dev
+{{- else if eq .Values.metadata.env "test" }}
+  name: {{ .Release.Name }}-{{ .Values.metadata.name }}-test
+{{- else if eq .Values.metadata.env "prod" }}
+  name: {{ .Release.Name }}-{{ .Values.metadata.name }}-prod
+{{- else }}
+  name: {{ .Release.Name }}-{{ .Values.metadata.name }}
+{{- end }}
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.metadata.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.metadata.name }}
+        {{- include "labels" . | indent 6 }}
+    spec:
+      containers:
+      - image: kareemelkasaby/{{ .Values.metadata.name }}
+        name: {{ .Values.metadata.name }}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        resources: {}
