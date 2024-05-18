@@ -3,7 +3,7 @@ kind: AlertmanagerConfig
 metadata:
   name: alert-config
   labels:
-    release: prometheus
+    role: iti-config
 spec:
   route:
     groupBy: ["alertname"]
